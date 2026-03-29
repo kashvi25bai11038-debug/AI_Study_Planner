@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyAI — Smart Study Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">📚</div>
+        <div class="logo-text">Study<span>AI</span></div>
+      </div>
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="setup">⚙️ Setup</button>
+        <button class="tab-btn" data-tab="schedule">📅 Schedule</button>
+        <button class="tab-btn" data-tab="progress">📊 Progress</button>
+      </nav>
+      <div class="header-date" id="headerDate"></div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- Setup tab -->
+      <section id="tab-setup" class="tab-section active">
+        <div class="section-title">Configure Your Planner</div>
+        <div class="section-sub">Add your topics, exam dates, and study availability to generate a personalized schedule.</div>
+
+        <div class="setup-grid">
+          <!-- Add topic card -->
+          <div class="card">
+            <div class="card-title">📝 Add Study Topic</div>
+            <div class="form-grid">
+              <div class="field">
+                <label>Topic Name</label>
+                <input type="text" id="topicName" placeholder="e.g. Sorting Algorithms" />
+              </div>
+              <div class="field">
+                <label>Subject</label>
+                <input type="text" id="topicSubject" placeholder="e.g. Data Structures" />
+              </div>
+              <div class="field">
+                <label>Exam Date</label>
+                <input type="date" id="topicDate" />
+              </div>
+              <div class="field">
+                <label>Difficulty Level</label>
+                <div class="stars" id="starsInput">
+                  <button class="star" data-val="1">★</button>
+                  <button class="star" data-val="2">★</button>
+                  <button class="star active" data-val="3">★</button>
+                  <button class="star" data-val="4">★</button>
+                  <button class="star" data-val="5">★</button>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="addTopicBtn">+ Add Topic</button>
+
+            <!-- Topic list -->
+            <div class="topic-list" id="topicList">
+              <div class="empty-topics">No topics yet. Add one above ↑</div>
+            </div>
+          </div>
+
+          <!-- Settings sidebar -->
+          <div class="sidebar">
+            <div class="card" style="margin-bottom:16px">
+              <div class="card-title">⏱ Study Settings</div>
+              <div class="field">
+                <label>Daily Study Hours</label>
+                <input type="number" id="dailyHours" min="1" max="12" step="0.5" value="4" />
+              </div>
+              <p class="hint-text">The scheduler distributes topics across available days, prioritizing harder topics with closer exam dates.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">📊 Summary</div>
+              <div class="summary-list">
+                <div class="summary-row"><span>Topics added</span><strong id="sumTopics">0</strong></div>
+                <div class="summary-row"><span>Daily hours</span><strong id="sumHours">4h</strong></div>
+                <div class="summary-row"><span>Subjects</span><strong id="sumSubjects">0</strong></div>
+                <div class="summary-row"><span>Avg difficulty</span><strong id="sumDiff">—</strong></div>
+              </div>
+              <button class="btn btn-generate" id="generateBtn">✨ Generate Schedule</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCHEDULE TAB -->
+      <section id="tab-schedule" class="tab-section">
+        <div class="flex-between" style="margin-bottom:28px">
+          <div>
+            <div class="section-title">Your Study Schedule</div>
+            <div class="section-sub">Click any block to mark it as complete.</div>
+          </div>
+          <button class="btn btn-ghost" id="backToSetupBtn">← Edit Setup</button>
+        </div>
+
+        <div id="scheduleEmpty" class="empty-state">
+          <div class="empty-icon">📅</div>
+          <div class="empty-title">No schedule yet</div>
+          <div class="empty-sub">Head over to Setup and generate your personalized plan.</div>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="switchTab('setup')">Go to Setup</button>
+        </div>
+
+        <div id="scheduleContent" class="schedule-layout" style="display:none">
+          <div id="scheduleDays" class="schedule-days"></div>
+          <div class="schedule-sidebar">
+            <div class="card" style="margin-bottom:16px">
+              <div class="card-title">📈 Plan Overview</div>
+              <div class="summary-list">
+                <div class="summary-row"><span>Total days</span><strong id="ovTotalDays">—</strong></div>
+                <div class="summary-row"><span>Total blocks</span><strong id="ovTotalBlocks">—</strong></div>
+                <div class="summary-row"><span>Completed</span><strong id="ovDone">0</strong></div>
+                <div class="summary-row"><span>Remaining</span><strong id="ovRemaining">—</strong></div>
+                <div class="summary-row"><span>Study hours</span><strong id="ovHours">—</strong></div>
+              </div>
+              <div style="margin-top:16px">
+                <div class="flex-between" style="font-size:12px;margin-bottom:6px">
+                  <span style="color:var(--text-muted)">Progress</span>
+                  <strong id="ovProgress" style="color:var(--amber)">0%</strong>
+                </div>
+                <div class="progress-track"><div class="progress-fill" id="ovProgressBar" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">📚 Topics</div>
+              <div id="scheduleTopicList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROGRESS TAB -->
+      <section id="tab-progress" class="tab-section">
+        <div class="section-title">Progress Tracker</div>
+        <div class="section-sub">Monitor your preparation across all subjects and topics.</div>
+
+        <div id="progressEmpty" class="empty-state">
+          <div class="empty-icon">📊</div>
+          <div class="empty-title">No data yet</div>
+          <div class="empty-sub">Generate a schedule and start marking topics as done.</div>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="switchTab('setup')">Get Started</button>
+        </div>
+
+        <div id="progressContent" style="display:none">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-val accent" id="pgProgress">0%</div><div class="stat-label">Overall Progress</div></div>
+            <div class="stat-card"><div class="stat-val" id="pgDone">0</div><div class="stat-label">Blocks Completed</div></div>
+            <div class="stat-card"><div class="stat-val" id="pgRemaining">0</div><div class="stat-label">Blocks Remaining</div></div>
+            <div class="stat-card"><div class="stat-val" id="pgTopics">0</div><div class="stat-label">Total Topics</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">📚 Subject Breakdown</div>
+            <div id="subjectBreakdown"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
