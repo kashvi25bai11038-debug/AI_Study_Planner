@@ -101,8 +101,7 @@ No Node.js. No npm. No Python. No server.
 **Option A — Clone the repository**
 
 ```bash
-git clone https://github.com/your-username/studyai.git
-cd studyai
+git clone https://github.com/kashvi25bai11038-debug/AI_Study_Planner
 ```
 
 **Option B — Download as ZIP**
@@ -310,8 +309,6 @@ Contributions are welcome! To get started:
 6. Push and open a Pull Request
 
 **Code style:** vanilla JS, no transpilation, no bundler. Keep functions small and well-named. Escape all HTML output. Comment non-obvious logic.
-
----
 
 ---
 
