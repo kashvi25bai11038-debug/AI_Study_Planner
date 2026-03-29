@@ -4,7 +4,7 @@
 
 **A priority-driven, browser-based study scheduler that thinks like a tutor.**
 
-
+**Live Demo:** file:///C:/Users/Gaurav/Desktop/AI%20Study%20Planner/index%20(1).html
 
 <br/>
 
@@ -34,7 +34,6 @@
 - [Known Limitations](#known-limitations)
 - [Future Improvements](#future-improvements)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
